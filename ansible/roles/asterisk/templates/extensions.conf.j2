@@ -1,0 +1,26 @@
+; Managed by Ansible. Do not edit directly on the VM.
+
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=no
+
+[globals]
+
+[internal]
+; Echo test
+exten => 600,1,Answer()
+ same => n,Echo()
+ same => n,Hangup()
+
+; Hello-world playback
+exten => 700,1,Answer()
+ same => n,Playback(hello-world)
+ same => n,Hangup()
+
+; Internal extensions
+{% for phone in asterisk_extensions %}
+exten => {{ phone.extension }},1,Dial(PJSIP/{{ phone.extension }},30)
+ same => n,Hangup()
+
+{% endfor %}

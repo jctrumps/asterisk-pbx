@@ -1,0 +1,23 @@
+services:
+  asterisk:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "{{ asterisk_image_name }}:{{ asterisk_image_tag }}"
+    container_name: "{{ asterisk_container_name }}"
+    restart: "{{ asterisk_restart_policy }}"
+    network_mode: host
+    volumes:
+      - "{{ asterisk_config_dir }}/pjsip.conf:/etc/asterisk/pjsip.conf:ro"
+      - "{{ asterisk_config_dir }}/extensions.conf:/etc/asterisk/extensions.conf:ro"
+      - "{{ asterisk_config_dir }}/rtp.conf:/etc/asterisk/rtp.conf:ro"
+      - "{{ asterisk_config_dir }}/logger.conf:/etc/asterisk/logger.conf:ro"
+      - "{{ asterisk_config_dir }}/modules.conf:/etc/asterisk/modules.conf:ro"
+      - "{{ asterisk_log_dir }}:/var/log/asterisk"
+      - "{{ asterisk_spool_dir }}:/var/spool/asterisk"
+    healthcheck:
+      test: ["CMD-SHELL", "asterisk -rx 'core show uptime' >/dev/null 2>&1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s

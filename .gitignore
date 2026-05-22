@@ -1,0 +1,19 @@
+# OpenTofu / Terraform state
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.*
+**/terraform.tfvars
+**/crash.log
+**/crash.*.log
+
+# Ansible generated/secrets
+ansible/inventory/hosts.ini
+ansible/group_vars/asterisk_vault.yml
+*.retry
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+*.swp

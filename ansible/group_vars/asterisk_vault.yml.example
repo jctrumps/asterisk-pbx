@@ -1,0 +1,11 @@
+---
+# Copy this file to group_vars/asterisk_vault.yml and encrypt it later with:
+# ansible-vault encrypt group_vars/asterisk_vault.yml
+
+asterisk_extensions:
+  - extension: "1001"
+    display_name: "Phone 1001"
+    password: "replace-with-a-long-random-password-for-1001"
+  - extension: "1002"
+    display_name: "Phone 1002"
+    password: "replace-with-a-long-random-password-for-1002"

@@ -1,0 +1,53 @@
+---
+# Filesystem layout on the PBX VM
+asterisk_project_dir: /opt/asterisk-pbx
+asterisk_compose_dir: "{{ asterisk_project_dir }}/compose"
+asterisk_config_dir: "{{ asterisk_project_dir }}/config"
+asterisk_log_dir: "{{ asterisk_project_dir }}/log"
+asterisk_spool_dir: "{{ asterisk_project_dir }}/spool"
+
+# Container settings
+asterisk_container_name: asterisk
+asterisk_image_name: local/asterisk-pbx
+asterisk_image_tag: latest
+asterisk_restart_policy: unless-stopped
+
+# Network settings
+# Docker uses host networking inside the VM.
+asterisk_sip_bind: "0.0.0.0"
+asterisk_sip_udp_port: 5060
+asterisk_rtp_start: 10000
+asterisk_rtp_end: 10100
+
+# Adjust this to your LAN/VLAN.
+asterisk_local_net: "192.168.1.0/24"
+
+# Leave these empty for LAN-only use.
+# Set these if you expose this PBX behind NAT or use an external SIP trunk.
+asterisk_external_signaling_address: ""
+asterisk_external_media_address: ""
+
+# Basic internal extensions.
+# Override passwords in group_vars/asterisk_vault.yml.
+asterisk_extensions:
+  - extension: "1001"
+    display_name: "Phone 1001"
+    password: "CHANGE_ME_1001_LONG_RANDOM_PASSWORD"
+  - extension: "1002"
+    display_name: "Phone 1002"
+    password: "CHANGE_ME_1002_LONG_RANDOM_PASSWORD"
+
+# Keep true after initial testing.
+asterisk_enforce_password_change: true
+
+# OS packages installed before Docker/Asterisk deploy.
+common_packages:
+  - ca-certificates
+  - curl
+  - gnupg
+  - lsb-release
+  - sudo
+  - vim
+  - htop
+  - tcpdump
+  - sngrep

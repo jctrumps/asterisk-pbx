@@ -1,0 +1,120 @@
+; Managed by Ansible. Do not edit directly on the VM.
+
+[modules]
+autoload=yes
+
+;
+; Keep autoload enabled for now so Asterisk can load required dependencies.
+; Disable modules we are not using in this small lab PBX.
+;
+
+; Old/unused channel drivers
+noload => chan_iax2.so
+noload => chan_console.so
+noload => chan_unistim.so
+noload => chan_motif.so
+noload => chan_alsa.so
+noload => chan_oss.so
+
+; Realtime/database backends we are not using
+noload => res_config_pgsql.so
+noload => res_config_ldap.so
+noload => res_config_odbc.so
+noload => res_config_curl.so
+noload => res_odbc.so
+noload => res_odbc_transaction.so
+
+; PostgreSQL/ODBC/TDS/RADIUS CDR/CEL modules we are not using
+noload => cdr_pgsql.so
+noload => cdr_odbc.so
+noload => cdr_adaptive_odbc.so
+noload => cdr_tds.so
+noload => cdr_radius.so
+noload => cel_pgsql.so
+noload => cel_odbc.so
+noload => cel_tds.so
+noload => cel_radius.so
+noload => cel_sqlite3_custom.so
+noload => cdr_sqlite3_custom.so
+
+; Optional APIs/features not needed yet
+noload => res_ari.so
+noload => res_ari_applications.so
+noload => res_ari_asterisk.so
+noload => res_ari_bridges.so
+noload => res_ari_channels.so
+noload => res_ari_device_states.so
+noload => res_ari_endpoints.so
+noload => res_ari_events.so
+noload => res_ari_mailboxes.so
+noload => res_ari_model.so
+noload => res_ari_playbacks.so
+noload => res_ari_recordings.so
+noload => res_ari_sounds.so
+noload => res_stasis.so
+noload => res_stasis_recording.so
+noload => res_stasis_snoop.so
+noload => res_stasis_test.so
+
+; Optional services we are not using
+noload => res_xmpp.so
+noload => res_phoneprov.so
+noload => res_calendar.so
+noload => res_calendar_caldav.so
+noload => res_calendar_ews.so
+noload => res_calendar_exchange.so
+noload => res_calendar_icalendar.so
+noload => res_smdi.so
+noload => res_snmp.so
+noload => res_statsd.so
+
+; Optional apps that caused noise or are not useful for this basic PBX
+noload => app_jack.so
+noload => app_festival.so
+noload => app_mp3.so
+noload => app_sms.so
+noload => app_voicemail_imap.so
+noload => app_alarmreceiver.so
+noload => app_adsiprog.so
+
+; Optional fax/geolocation/STIR-SHAKEN for later
+noload => res_fax.so
+noload => res_geolocation.so
+noload => res_pjsip_geolocation.so
+noload => res_stir_shaken.so
+
+; Optional HEP/homer monitoring modules
+noload => res_hep.so
+noload => res_hep_pjsip.so
+noload => res_hep_rtcp.so
+
+; Optional speech/external media helpers
+noload => res_speech.so
+noload => res_speech_aeap.so
+noload => res_audiosocket.so
+noload => app_audiosocket.so
+noload => res_aeap.so
+
+; Deprecated chan_sip — we use PJSIP
+noload => chan_sip.so
+
+; More optional/deprecated modules not needed for basic PJSIP lab PBX
+noload => res_adsi.so
+noload => app_getcpeid.so
+noload => app_macro.so
+
+; Modules failing because their parent dependency is intentionally disabled
+noload => res_pjsip_phoneprov_provider.so
+noload => app_stasis.so
+noload => res_stasis_answer.so
+noload => res_stasis_playback.so
+noload => res_stasis_device_state.so
+noload => func_odbc.so
+noload => app_voicemail_odbc.so
+noload => app_speech_utils.so
+noload => res_agi.so
+noload => res_pjsip_stir_shaken.so
+noload => res_fax_spandsp.so
+noload => chan_audiosocket.so
+noload => res_pjsip_transport_websocket.so
+noload => pbx_dundi.so

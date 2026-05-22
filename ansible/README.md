@@ -1,0 +1,32 @@
+# Ansible layer
+
+This folder configures the PBX VM and deploys Asterisk using Docker Compose.
+
+## First-time setup
+
+```bash
+cp inventory/hosts.ini.example inventory/hosts.ini
+cp group_vars/asterisk_vault.yml.example group_vars/asterisk_vault.yml
+vim group_vars/asterisk_vault.yml
+ansible-galaxy collection install -r requirements.yml
+ansible-playbook site.yml
+```
+
+If you use the OpenTofu layer, it will generate `inventory/hosts.ini` for you.
+
+## Useful commands
+
+```bash
+ansible all -m ping
+ansible-playbook site.yml --syntax-check
+ansible-playbook site.yml
+```
+
+SSH to the VM and inspect Asterisk:
+
+```bash
+sudo docker ps
+sudo docker exec -it asterisk asterisk -rvvv
+sudo docker exec asterisk asterisk -rx "pjsip show endpoints"
+sudo docker exec asterisk asterisk -rx "core show channels"
+```

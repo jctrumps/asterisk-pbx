@@ -1,0 +1,22 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       ca-certificates \
+       procps \
+       tini \
+       asterisk \
+       asterisk-modules \
+       asterisk-core-sounds-en-gsm \
+       asterisk-moh-opsound-gsm \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+EXPOSE {{ asterisk_sip_udp_port }}/udp {{ asterisk_rtp_start }}-{{ asterisk_rtp_end }}/udp
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/docker-entrypoint.sh"]
+CMD ["asterisk", "-f", "-U", "asterisk", "-G", "asterisk", "-vvv"]

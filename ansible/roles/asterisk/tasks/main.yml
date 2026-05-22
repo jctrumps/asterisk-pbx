@@ -1,0 +1,75 @@
+---
+- name: Validate SIP extension passwords were changed
+  ansible.builtin.assert:
+    that:
+      - item.password is defined
+      - item.password | length >= 12
+      - not (item.password is match('^CHANGE_ME'))
+      - not (item.password is search('replace-with'))
+    fail_msg: "Change the SIP password for extension {{ item.extension }} in group_vars/asterisk_vault.yml."
+  loop: "{{ asterisk_extensions }}"
+  when: asterisk_enforce_password_change | bool
+  no_log: true
+
+- name: Create Asterisk project directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - "{{ asterisk_project_dir }}"
+    - "{{ asterisk_compose_dir }}"
+    - "{{ asterisk_config_dir }}"
+    - "{{ asterisk_log_dir }}"
+    - "{{ asterisk_spool_dir }}"
+
+- name: Install Docker build/deploy files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ asterisk_compose_dir }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - { src: compose.yml.j2, dest: compose.yml, mode: "0644" }
+    - { src: Dockerfile.j2, dest: Dockerfile, mode: "0644" }
+    - { src: docker-entrypoint.sh.j2, dest: docker-entrypoint.sh, mode: "0755" }
+  notify: Recreate Asterisk container
+
+- name: Install Asterisk config files
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ asterisk_config_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - pjsip.conf
+    - extensions.conf
+    - rtp.conf
+    - logger.conf
+    - modules.conf
+  notify: Reload Asterisk
+
+- name: Ensure Asterisk bind-mount directories are readable
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+  loop:
+    - "{{ asterisk_config_dir }}"
+    - "{{ asterisk_log_dir }}"
+    - "{{ asterisk_spool_dir }}"
+
+- name: Build and start Asterisk container
+  community.docker.docker_compose_v2:
+    project_src: "{{ asterisk_compose_dir }}"
+    files:
+      - compose.yml
+    state: present
+    build: always
+    remove_orphans: true

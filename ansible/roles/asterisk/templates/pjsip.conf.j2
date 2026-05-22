@@ -1,0 +1,49 @@
+; Managed by Ansible. Do not edit directly on the VM.
+
+[global]
+type=global
+user_agent=asterisk-pbx
+endpoint_identifier_order=ip,username,anonymous
+
+[transport-udp]
+type=transport
+protocol=udp
+bind={{ asterisk_sip_bind }}:{{ asterisk_sip_udp_port }}
+local_net={{ asterisk_local_net }}
+{% if asterisk_external_signaling_address | default('') | length > 0 %}
+external_signaling_address={{ asterisk_external_signaling_address }}
+{% endif %}
+{% if asterisk_external_media_address | default('') | length > 0 %}
+external_media_address={{ asterisk_external_media_address }}
+{% endif %}
+
+{% for phone in asterisk_extensions %}
+[auth{{ phone.extension }}]
+type=auth
+auth_type=userpass
+username={{ phone.extension }}
+password={{ phone.password }}
+
+[{{ phone.extension }}]
+type=aor
+max_contacts=1
+remove_existing=yes
+qualify_frequency=60
+
+[{{ phone.extension }}]
+type=endpoint
+transport=transport-udp
+context=internal
+disallow=all
+allow=ulaw
+allow=alaw
+auth=auth{{ phone.extension }}
+aors={{ phone.extension }}
+callerid="{{ phone.display_name | default('Phone ' ~ phone.extension) }}" <{{ phone.extension }}>
+direct_media=no
+rtp_symmetric=yes
+force_rport=yes
+rewrite_contact=yes
+ice_support=no
+
+{% endfor %}

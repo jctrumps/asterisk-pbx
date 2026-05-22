@@ -1,0 +1,16 @@
+---
+- name: Recreate Asterisk container
+  community.docker.docker_compose_v2:
+    project_src: "{{ asterisk_compose_dir }}"
+    files:
+      - compose.yml
+    state: present
+    build: always
+    remove_orphans: true
+    recreate: always
+
+- name: Reload Asterisk
+  ansible.builtin.command: "docker exec {{ asterisk_container_name }} asterisk -rx 'core reload'"
+  register: asterisk_reload_result
+  changed_when: "'Reloading' in asterisk_reload_result.stdout or asterisk_reload_result.rc == 0"
+  failed_when: false
