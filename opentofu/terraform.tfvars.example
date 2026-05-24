@@ -5,8 +5,8 @@ proxmox_insecure_tls = true
 proxmox_node         = "pve"
 
 # Existing cloud-init template to clone
-# Example: VM 9000 is a Debian/Ubuntu cloud-init template with qemu-guest-agent installed.
-template_vm_id = 9000
+# Example: VM 9024 is a Debian/Ubuntu cloud-init template with qemu-guest-agent installed.
+template_vm_id = 9024
 
 # PBX VM
 vm_id            = 150

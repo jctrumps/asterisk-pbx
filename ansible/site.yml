@@ -4,6 +4,21 @@
   become: true
   gather_facts: true
 
+  pre_tasks:
+    - name: Check for Asterisk vault overrides
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/group_vars/asterisk_vault.yml"
+      register: asterisk_vault_file
+      delegate_to: localhost
+      become: false
+      run_once: true
+
+    - name: Load Asterisk vault overrides
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/group_vars/asterisk_vault.yml"
+      when: asterisk_vault_file.stat.exists
+      no_log: true
+
   roles:
     - role: common
     - role: docker

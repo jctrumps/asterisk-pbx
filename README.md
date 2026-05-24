@@ -108,9 +108,12 @@ ansible/group_vars/asterisk.yml
 ### 3. Deploy the PBX
 
 ```bash
+export ANSIBLE_CONFIG="$PWD/ansible.cfg"
 ansible-galaxy collection install -r requirements.yml
 ansible-playbook site.yml
 ```
+
+If you run Ansible from WSL on `/mnt/c/...`, exporting `ANSIBLE_CONFIG` is important because Ansible may otherwise ignore the repository `ansible.cfg` and skip the generated inventory.
 
 ### 4. Register softphones
 
@@ -126,6 +129,15 @@ Test dialplan:
 ```text
 600 = echo test
 700 = hello-world playback
+```
+
+Once phones are registered, you can verify the live system with:
+
+```bash
+sudo docker ps
+sudo docker exec asterisk asterisk -rx "pjsip show endpoints"
+sudo docker exec asterisk asterisk -rx "pjsip show contacts"
+sudo docker exec asterisk asterisk -rx "core show channels"
 ```
 
 ## One-command helpers
@@ -145,6 +157,10 @@ Or:
 ./scripts/deploy-all.sh
 ```
 
+For the day-to-day operator flow and troubleshooting, see `docs/runbook.md`.
+
+If you use the WSL helper scripts, note that `scripts/install-prereqs-wsl.sh` installs Ansible tooling but not OpenTofu. Install `tofu` separately in the environment where you plan to run `scripts/deploy-infra.sh` or `scripts/deploy-all.sh`.
+
 ## Important security notes
 
 This project intentionally starts as a simple lab PBX. Before exposing it to the internet:
@@ -163,6 +179,7 @@ Typical daily workflow:
 ```bash
 # Change Asterisk config variables or templates
 cd ansible
+export ANSIBLE_CONFIG="$PWD/ansible.cfg"
 ansible-playbook site.yml
 ```
 
@@ -173,6 +190,7 @@ cd opentofu
 tofu apply
 
 cd ../ansible
+export ANSIBLE_CONFIG="$PWD/ansible.cfg"
 ansible-playbook site.yml
 ```
 

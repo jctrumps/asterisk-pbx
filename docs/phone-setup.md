@@ -2,6 +2,8 @@
 
 Use the PBX VM IP address as the SIP server.
 
+Replace the example server IP below with the actual value from your deployment.
+
 Example for extension `1001`:
 
 ```text
@@ -29,9 +31,22 @@ STUN:              off for LAN use
 
 ```bash
 sudo docker exec -it asterisk asterisk -rvvv
+```
+
+Once you are at the `*CLI>` prompt, run:
+
+```text
 pjsip show endpoints
 pjsip show contacts
 core show channels
 rtp set debug on
 rtp set debug off
+```
+
+From the normal shell, use:
+
+```bash
+sudo docker exec asterisk asterisk -rx "pjsip show endpoints"
+sudo docker exec asterisk asterisk -rx "pjsip show contacts"
+sudo docker logs -f asterisk
 ```
