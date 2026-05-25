@@ -4,4 +4,9 @@ set -euo pipefail
 mkdir -p /var/log/asterisk /var/spool/asterisk /var/run/asterisk
 chown -R asterisk:asterisk /var/log/asterisk /var/spool/asterisk /var/run/asterisk || true
 
+mkdir -p /root
+touch /root/.asterisk_history
+chmod 700 /root
+chmod 600 /root/.asterisk_history
+
 exec "$@"

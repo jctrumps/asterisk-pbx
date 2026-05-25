@@ -108,12 +108,17 @@ ansible/group_vars/asterisk.yml
 ### 3. Deploy the PBX
 
 ```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/asterisk_pbx_ed25519
 export ANSIBLE_CONFIG="$PWD/ansible.cfg"
 ansible-galaxy collection install -r requirements.yml
+ansible all -m ping
 ansible-playbook site.yml
 ```
 
 If you run Ansible from WSL on `/mnt/c/...`, exporting `ANSIBLE_CONFIG` is important because Ansible may otherwise ignore the repository `ansible.cfg` and skip the generated inventory.
+
+If the first `ansible-playbook` run against a new VM fails with `Permission denied (publickey)`, the usual cause is that WSL does not have the matching private key loaded yet. Start `ssh-agent`, run `ssh-add`, and verify with `ansible all -m ping` before retrying the playbook.
 
 ### 4. Register softphones
 

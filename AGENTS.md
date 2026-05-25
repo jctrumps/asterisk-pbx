@@ -36,7 +36,7 @@ The intended target is a dedicated Debian or Ubuntu VM, not Docker directly on t
 2. Copy `ansible/group_vars/asterisk_vault.yml.example` to `ansible/group_vars/asterisk_vault.yml` and replace all placeholder passwords.
 3. Run `tofu init && tofu apply` in `opentofu/`.
 4. Confirm `ansible/inventory/hosts.ini` contains the correct VM IP or hostname.
-5. Run `ansible-galaxy collection install -r requirements.yml` and `ansible-playbook site.yml` in `ansible/`.
+5. In WSL, load the matching SSH key, export `ANSIBLE_CONFIG="$PWD/ansible.cfg"`, run `ansible all -m ping`, then run `ansible-playbook site.yml` in `ansible/`.
 6. Register phones to the VM IP on UDP `5060`.
 
 ## Repo-specific gotchas
@@ -45,6 +45,7 @@ The intended target is a dedicated Debian or Ubuntu VM, not Docker directly on t
 - `scripts/install-prereqs-wsl.sh` installs Ansible tooling, but not OpenTofu.
 - When running Ansible from WSL under `/mnt/c/...`, export `ANSIBLE_CONFIG="$PWD/ansible.cfg"` or Ansible may ignore the repo config and inventory.
 - WSL must have the private key that matches `ssh_public_keys`; if the key is encrypted, start `ssh-agent` and run `ssh-add` before `ansible-playbook`.
+- After reprovisioning a VM, the fastest first-run check is `ansible all -m ping` from `ansible/` after loading the SSH key and exporting `ANSIBLE_CONFIG`.
 - `Makefile` and `scripts/*.sh` assume a Unix-like shell; the PowerShell scripts are the Windows-oriented helpers.
 - Security controls like firewalling, Fail2ban, SIP TLS, and trunk-specific hardening are documented but not automated.
 
@@ -52,7 +53,9 @@ The intended target is a dedicated Debian or Ubuntu VM, not Docker directly on t
 
 - OpenTofu provisioning succeeded with template VM ID `9024`.
 - Ansible deployment succeeded to VM `pbx-1`.
+- The Ansible roles were updated to use `ansible_facts[...]` instead of deprecated injected top-level facts.
 - The Asterisk container starts healthy as `local/asterisk-pbx:latest`.
+- Interactive `asterisk -rvvv` no longer depends on a missing `/root/.asterisk_history` file.
 - Extensions `1001` and `1002` register and can call each other.
 
 ## Change guidance for future agents

@@ -13,6 +13,11 @@ RUN apt-get update \
        asterisk-moh-opsound-gsm \
     && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /root \
+    && touch /root/.asterisk_history \
+    && chmod 700 /root \
+    && chmod 600 /root/.asterisk_history
+
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

@@ -97,14 +97,19 @@ Do not leave placeholder passwords in place. The playbook is designed to fail wh
 From `ansible/`:
 
 ```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/asterisk_pbx_ed25519
 export ANSIBLE_CONFIG="$PWD/ansible.cfg"
 ansible-galaxy collection install -r requirements.yml
+ansible all -m ping
 ansible-playbook site.yml
 ```
 
 If you run from WSL on `/mnt/c/...`, this matters. Without `ANSIBLE_CONFIG`, Ansible may ignore the repository's `ansible.cfg`, which means it will not automatically use `inventory/hosts.ini`.
 
 WSL must also have access to the private key that matches the public key in `ssh_public_keys`. If the key is passphrase-protected, start `ssh-agent` and load it with `ssh-add` before running Ansible.
+
+The `ansible all -m ping` check is worth doing every time you bring up a brand new VM. It catches SSH key and inventory issues before the full playbook runs.
 
 What Ansible does:
 
@@ -179,6 +184,23 @@ Check:
 - your SSH key was included in `ssh_public_keys`
 - WSL has the matching private key available for SSH authentication
 - port `22/tcp` is reachable from the operator machine
+
+If the error is `Permission denied (publickey)`, run:
+
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/asterisk_pbx_ed25519
+export ANSIBLE_CONFIG="$PWD/ansible.cfg"
+ansible all -m ping
+```
+
+If that still fails, test direct SSH with:
+
+```bash
+ssh <vm_username>@<pbx-vm-ip>
+```
+
+If direct SSH fails, fix SSH access first. Ansible will not succeed until normal SSH login works.
 
 ### Docker install fails
 
