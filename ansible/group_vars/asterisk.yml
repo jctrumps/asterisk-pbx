@@ -5,13 +5,14 @@ asterisk_compose_dir: "{{ asterisk_project_dir }}/compose"
 asterisk_config_dir: "{{ asterisk_project_dir }}/config"
 asterisk_log_dir: "{{ asterisk_project_dir }}/log"
 asterisk_spool_dir: "{{ asterisk_project_dir }}/spool"
+asterisk_scripts_dir: "{{ asterisk_project_dir }}/scripts"
 
 # Container settings
 asterisk_container_name: asterisk
 asterisk_image_name: local/asterisk-pbx
 asterisk_image_tag: latest
 asterisk_restart_policy: unless-stopped
-asterisk_version: "22-current"
+asterisk_version: "22.10.1"
 
 # Network settings
 # Docker uses host networking inside the VM.

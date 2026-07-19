@@ -79,4 +79,5 @@ sudo docker exec asterisk asterisk -rx "pjsip show contacts"
 sudo docker exec asterisk asterisk -rx "core show channels"
 sudo docker exec asterisk asterisk -rx "ari show status"
 sudo docker logs -f asterisk
+sudo /opt/asterisk-pbx/scripts/verify-asterisk.sh
 ```

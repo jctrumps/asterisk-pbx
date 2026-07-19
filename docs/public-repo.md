@@ -43,7 +43,7 @@ Check for:
 From the repo root:
 
 ```bash
-git grep -n -I -E "<personal-name>|<alias>|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|automation@|api2/json|BEGIN .*PRIVATE KEY"
+git grep -n -I -E "<personal-name>|<alias>|<private-ip>|automation@|api2/json|<private-key-marker>"
 ```
 
 ```bash

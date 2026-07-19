@@ -47,6 +47,7 @@
     - "{{ asterisk_config_dir }}"
     - "{{ asterisk_log_dir }}"
     - "{{ asterisk_spool_dir }}"
+    - "{{ asterisk_scripts_dir }}"
 
 - name: Install Docker build/deploy files
   ansible.builtin.template:
@@ -70,6 +71,7 @@
     mode: "0644"
   loop:
     - pjsip.conf
+    - asterisk.conf
     - extensions.conf
     - rtp.conf
     - logger.conf
@@ -79,6 +81,14 @@
     - queues.conf
     - voicemail.conf
   notify: Reload Asterisk
+
+- name: Install Asterisk verification script
+  ansible.builtin.template:
+    src: verify-asterisk.sh.j2
+    dest: "{{ asterisk_scripts_dir }}/verify-asterisk.sh"
+    owner: root
+    group: root
+    mode: "0755"
 
 - name: Ensure Asterisk bind-mount directories are readable
   ansible.builtin.file:
@@ -91,6 +101,7 @@
     - "{{ asterisk_config_dir }}"
     - "{{ asterisk_log_dir }}"
     - "{{ asterisk_spool_dir }}"
+    - "{{ asterisk_scripts_dir }}"
 
 - name: Build and start Asterisk container
   community.docker.docker_compose_v2:

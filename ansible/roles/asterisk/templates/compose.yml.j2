@@ -8,6 +8,7 @@ services:
     restart: "{{ asterisk_restart_policy }}"
     network_mode: host
     volumes:
+      - "{{ asterisk_config_dir }}/asterisk.conf:/etc/asterisk/asterisk.conf:ro"
       - "{{ asterisk_config_dir }}/pjsip.conf:/etc/asterisk/pjsip.conf:ro"
       - "{{ asterisk_config_dir }}/extensions.conf:/etc/asterisk/extensions.conf:ro"
       - "{{ asterisk_config_dir }}/rtp.conf:/etc/asterisk/rtp.conf:ro"

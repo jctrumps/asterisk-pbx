@@ -31,7 +31,7 @@ The intended target is a dedicated Debian or Ubuntu VM, not Docker directly on t
 - `ansible/ansible.cfg` disables SSH host key checking for convenience.
 - `ansible/roles/asterisk/tasks/main.yml` intentionally fails if extension passwords are still placeholders.
 - The Asterisk container uses host networking inside the guest VM.
-- The PBX image builds Asterisk `22-current` from source so ARI, Stasis, and `chan_websocket` are available for AI voice-agent integration.
+- The PBX image builds pinned Asterisk `22.10.1` from source so ARI, Stasis, and `chan_websocket` are available for AI voice-agent integration.
 - The repository should stay safe for public publication: no real secrets, no personal usernames, and only example IP addresses in tracked files.
 
 ## Common operator workflow

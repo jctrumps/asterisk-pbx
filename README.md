@@ -2,6 +2,8 @@
 
 Repeatable Asterisk PBX deployment for a Proxmox VE + OpenTofu + Ansible environment.
 
+The container builds a pinned Asterisk `22.10.1` release so ARI, Stasis, and `chan_websocket` support are available for PBX-side AI voice-agent integration.
+
 This project uses a clean layered approach:
 
 ```text
@@ -152,9 +154,11 @@ sudo docker ps
 sudo docker exec asterisk asterisk -rx "pjsip show endpoints"
 sudo docker exec asterisk asterisk -rx "pjsip show contacts"
 sudo docker exec asterisk asterisk -rx "core show channels"
+sudo docker exec asterisk asterisk -rx "ari show status"
 ```
 
 For the PBX-side AI voice-agent integration notes, see `docs/ai-voice-agent-pbx.md`.
+For post-deploy Asterisk 22 verification, see `docs/asterisk-22-pbx-verification-and-hardening-plan.md`. The playbook installs a verifier at `/opt/asterisk-pbx/scripts/verify-asterisk.sh` on the PBX VM.
 
 ## One-command helpers
 

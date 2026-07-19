@@ -10,7 +10,7 @@ The AI inference VM, Hailo runtime, speech-to-text, language model, text-to-spee
 
 The PBX provides:
 
-- Asterisk 22 or newer built into the container image
+- Asterisk 22.6.0 or newer built into the container image
 - PJSIP extensions and future trunk support
 - HTTP and ARI enabled for an internal AI service
 - Stasis entry point for AI-owned calls
@@ -62,6 +62,12 @@ asterisk_http_bind: "0.0.0.0"
 asterisk_http_port: 8088
 ```
 
+The generated HTTP config does not set a prefix, so ARI is available at:
+
+```text
+http://<pbx-ip>:8088/ari
+```
+
 The ARI password must be set in local-only vault data:
 
 ```yaml
@@ -97,6 +103,8 @@ sudo docker exec asterisk asterisk -rx "ari show status"
 sudo docker exec asterisk asterisk -rx "module show like websocket"
 sudo docker exec asterisk asterisk -rx "module show like stasis"
 sudo docker exec asterisk asterisk -rx "queue show human-fallback"
+sudo docker exec asterisk asterisk -rx "dialplan show 800@internal"
+sudo /opt/asterisk-pbx/scripts/verify-asterisk.sh
 ```
 
 From the Asterisk CLI:

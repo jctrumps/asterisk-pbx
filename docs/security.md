@@ -15,6 +15,8 @@ Asterisk and SIP are common scan targets. Treat any exposed SIP service as hosti
 - Do not expose the Asterisk HTTP/ARI port, default `8088/tcp`, to untrusted networks.
 - Use a long random ARI password and restrict ARI access to the internal AI service network.
 
+See `docs/firewall.md` for a PBX-side firewall policy template.
+
 ## Suggested firewall policy
 
 LAN-only lab:
