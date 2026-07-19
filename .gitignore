@@ -4,12 +4,17 @@
 **/terraform.tfstate
 **/terraform.tfstate.*
 **/terraform.tfvars
+**/*.auto.tfvars
+**/*.tfplan
+**/*.tfplan.*
 **/crash.log
 **/crash.*.log
 
 # Ansible generated/secrets
 ansible/inventory/hosts.ini
+ansible/group_vars/asterisk_local.yml
 ansible/group_vars/asterisk_vault.yml
+ansible/.vault_pass*
 *.retry
 
 # OS/editor

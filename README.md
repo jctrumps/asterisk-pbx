@@ -30,7 +30,7 @@ asterisk-pbx/
 ```text
 Proxmox VE
 └── VM: pbx1
-    ├── IP: 192.168.1.50/24
+    ├── IP: 10.10.10.50/24
     ├── OS: Debian/Ubuntu cloud-init template clone
     ├── Docker Engine + Compose plugin
     └── Asterisk container using host networking inside the VM
@@ -39,7 +39,7 @@ Proxmox VE
 Phones and softphones register to the VM IP, for example:
 
 ```text
-SIP server: 192.168.1.50
+SIP server: 10.10.10.50
 Port:       5060/UDP
 Extension: 1001 or 1002
 ```
@@ -90,7 +90,14 @@ ansible/inventory/hosts.ini
 
 ```bash
 cd ../ansible
+cp group_vars/asterisk_local.yml.example group_vars/asterisk_local.yml
 cp group_vars/asterisk_vault.yml.example group_vars/asterisk_vault.yml
+```
+
+Edit local non-secret PBX settings in:
+
+```text
+ansible/group_vars/asterisk_local.yml
 ```
 
 Edit passwords in:
@@ -134,6 +141,8 @@ Test dialplan:
 ```text
 600 = echo test
 700 = hello-world playback
+800 = AI voice-agent Stasis entry point
+0   = human fallback queue
 ```
 
 Once phones are registered, you can verify the live system with:
@@ -144,6 +153,8 @@ sudo docker exec asterisk asterisk -rx "pjsip show endpoints"
 sudo docker exec asterisk asterisk -rx "pjsip show contacts"
 sudo docker exec asterisk asterisk -rx "core show channels"
 ```
+
+For the PBX-side AI voice-agent integration notes, see `docs/ai-voice-agent-pbx.md`.
 
 ## One-command helpers
 
@@ -176,6 +187,28 @@ This project intentionally starts as a simple lab PBX. Before exposing it to the
 - Consider using a VPN for remote phones instead of exposing SIP directly.
 - Add Fail2ban or equivalent protection before any public exposure.
 - Move secrets into Ansible Vault.
+
+## Public Repo Safety
+
+This repository is intended to be safe to publish when you keep local operator files out of version control.
+
+Do not commit:
+
+- `opentofu/terraform.tfvars`
+- `opentofu/terraform.tfstate`
+- `opentofu/terraform.tfstate.backup`
+- `ansible/inventory/hosts.ini`
+- `ansible/group_vars/asterisk_vault.yml`
+
+Use the example files instead:
+
+- `opentofu/terraform.tfvars.example`
+- `ansible/inventory/hosts.ini.example`
+- `ansible/group_vars/asterisk_vault.yml.example`
+
+Tracked example addresses in this repo use the documentation subnet `10.10.10.0/24`.
+
+For a publication checklist and review commands, see `docs/public-repo.md`.
 
 ## Rebuild/redeploy flow
 

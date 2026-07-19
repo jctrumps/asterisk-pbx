@@ -47,7 +47,7 @@ variable "vm_id" {
 variable "vm_name" {
   description = "Name of the PBX VM."
   type        = string
-  default     = "pbx1"
+  default     = "pbx-1"
 }
 
 variable "vm_description" {
@@ -105,15 +105,15 @@ variable "vm_vlan_id" {
 }
 
 variable "vm_ipv4_address" {
-  description = "CIDR address for cloud-init, for example 192.168.1.50/24, or dhcp."
+  description = "CIDR address for cloud-init, for example 10.10.10.50/24, or dhcp."
   type        = string
-  default     = "192.168.1.50/24"
+  default     = "10.10.10.50/24"
 }
 
 variable "vm_ipv4_gateway" {
   description = "IPv4 gateway. Ignored when vm_ipv4_address is dhcp."
   type        = string
-  default     = "192.168.1.1"
+  default     = "10.10.10.1"
 }
 
 variable "dns_domain" {

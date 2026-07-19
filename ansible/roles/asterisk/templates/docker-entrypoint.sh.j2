@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir -p /var/log/asterisk /var/spool/asterisk /var/run/asterisk
-chown -R asterisk:asterisk /var/log/asterisk /var/spool/asterisk /var/run/asterisk || true
+mkdir -p /var/lib/asterisk /var/log/asterisk /var/spool/asterisk /var/run/asterisk
+chown -R asterisk:asterisk /var/lib/asterisk /var/log/asterisk /var/spool/asterisk /var/run/asterisk || true
 
 mkdir -p /root
 touch /root/.asterisk_history

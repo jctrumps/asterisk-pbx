@@ -1,0 +1,16 @@
+; Managed by Ansible. Do not edit directly on the VM.
+
+[general]
+format=wav49|gsm|wav
+attach=no
+maxmsg=100
+maxsecs=180
+skipms=3000
+maxsilence=10
+silencethreshold=128
+serveremail=asterisk@example.invalid
+
+[{{ asterisk_voicemail_context }}]
+{% for mailbox in asterisk_voicemail_mailboxes %}
+{{ mailbox.mailbox }} => {{ mailbox.password }},{{ mailbox.name }},{{ mailbox.email }}
+{% endfor %}

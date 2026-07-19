@@ -1,0 +1,8 @@
+; Managed by Ansible. Do not edit directly on the VM.
+
+[general]
+enabled={{ 'yes' if asterisk_ari_enabled | bool else 'no' }}
+bindaddr={{ asterisk_http_bind }}
+bindport={{ asterisk_http_port }}
+tlsenable=no
+prefix=asterisk

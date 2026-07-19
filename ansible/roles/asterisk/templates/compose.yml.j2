@@ -13,6 +13,10 @@ services:
       - "{{ asterisk_config_dir }}/rtp.conf:/etc/asterisk/rtp.conf:ro"
       - "{{ asterisk_config_dir }}/logger.conf:/etc/asterisk/logger.conf:ro"
       - "{{ asterisk_config_dir }}/modules.conf:/etc/asterisk/modules.conf:ro"
+      - "{{ asterisk_config_dir }}/http.conf:/etc/asterisk/http.conf:ro"
+      - "{{ asterisk_config_dir }}/ari.conf:/etc/asterisk/ari.conf:ro"
+      - "{{ asterisk_config_dir }}/queues.conf:/etc/asterisk/queues.conf:ro"
+      - "{{ asterisk_config_dir }}/voicemail.conf:/etc/asterisk/voicemail.conf:ro"
       - "{{ asterisk_log_dir }}:/var/log/asterisk"
       - "{{ asterisk_spool_dir }}:/var/spool/asterisk"
     healthcheck:

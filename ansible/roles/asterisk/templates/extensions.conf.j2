@@ -8,6 +8,17 @@ clearglobalvars=no
 [globals]
 
 [internal]
+{% if asterisk_ari_enabled | bool %}
+; AI voice-agent entry point. The external ARI application owns the call after Stasis.
+exten => {{ asterisk_ai_extension }},1,NoOp(Send call to AI voice agent ARI app {{ asterisk_ai_stasis_app }})
+ same => n,Answer()
+ same => n,Stasis({{ asterisk_ai_stasis_app }})
+ same => n,Goto(ai-unavailable,s,1)
+
+; Human fallback shortcut from phones and from AI transfer logic.
+exten => {{ asterisk_operator_extension }},1,Goto(human-fallback,s,1)
+
+{% endif %}
 ; Echo test
 exten => 600,1,Answer()
  same => n,Echo()
@@ -24,3 +35,20 @@ exten => {{ phone.extension }},1,Dial(PJSIP/{{ phone.extension }},30)
  same => n,Hangup()
 
 {% endfor %}
+
+{% if asterisk_ari_enabled | bool %}
+[ai-unavailable]
+exten => s,1,NoOp(AI voice agent unavailable, routing to human fallback)
+ same => n,Playback(vm-nobodyavail)
+ same => n,Goto(human-fallback,s,1)
+
+[human-fallback]
+exten => s,1,NoOp(Route caller to human fallback queue {{ asterisk_human_queue_name }})
+ same => n,Queue({{ asterisk_human_queue_name }},tT,,,{{ asterisk_human_queue_timeout }})
+{% if asterisk_voicemail_enabled | bool %}
+ same => n,VoiceMail({{ asterisk_ai_fallback_mailbox }}@{{ asterisk_voicemail_context }},u)
+{% else %}
+ same => n,Playback(vm-nobodyavail)
+{% endif %}
+ same => n,Hangup()
+{% endif %}

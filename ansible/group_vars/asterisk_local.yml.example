@@ -1,0 +1,18 @@
+---
+# Copy this file to group_vars/asterisk_local.yml for local, non-secret PBX settings.
+# This file is ignored by git. Do not put passwords or tokens here.
+
+# Match your LAN/VLAN where phones register to the PBX.
+asterisk_local_net: "10.10.10.0/24"
+
+# Set these only if the PBX is behind NAT or uses an external SIP trunk.
+asterisk_external_signaling_address: ""
+asterisk_external_media_address: ""
+
+# ARI is intended for the internal AI service only. Restrict firewall access to this source.
+asterisk_ari_allowed_origins: "http://10.10.10.60:8000"
+
+# Optional local fallback behavior.
+asterisk_human_queue_members:
+  - "PJSIP/1001"
+asterisk_ai_fallback_mailbox: "1001"

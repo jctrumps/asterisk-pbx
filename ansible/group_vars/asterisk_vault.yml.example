@@ -9,3 +9,11 @@ asterisk_extensions:
   - extension: "1002"
     display_name: "Phone 1002"
     password: "replace-with-a-long-random-password-for-1002"
+
+asterisk_ari_password: "replace-with-a-long-random-ari-password"
+
+asterisk_voicemail_mailboxes:
+  - mailbox: "1001"
+    name: "Phone 1001"
+    email: "user@example.invalid"
+    password: "replace-with-a-voicemail-pin-for-1001"

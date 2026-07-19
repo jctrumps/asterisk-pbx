@@ -6,7 +6,9 @@ This folder configures the PBX VM and deploys Asterisk using Docker Compose.
 
 ```bash
 cp inventory/hosts.ini.example inventory/hosts.ini
+cp group_vars/asterisk_local.yml.example group_vars/asterisk_local.yml
 cp group_vars/asterisk_vault.yml.example group_vars/asterisk_vault.yml
+vim group_vars/asterisk_local.yml
 vim group_vars/asterisk_vault.yml
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/asterisk_pbx_ed25519
@@ -17,6 +19,10 @@ ansible-playbook site.yml
 ```
 
 If you use the OpenTofu layer, it will generate `inventory/hosts.ini` for you.
+
+Before the playbook can deploy the AI-ready PBX config, `group_vars/asterisk_vault.yml` must include real values for SIP extension passwords, `asterisk_ari_password`, and voicemail mailbox PINs.
+
+Use `group_vars/asterisk_local.yml` for local non-secret settings such as LAN subnet, NAT addresses, ARI allowed origins, and fallback queue members. Keep real passwords and tokens in `group_vars/asterisk_vault.yml` only.
 
 If you run Ansible from WSL against a repo under `/mnt/c/...`, Ansible may ignore `ansible.cfg` because the directory is world writable. Export `ANSIBLE_CONFIG="$PWD/ansible.cfg"` first, or pass `-i inventory/hosts.ini` explicitly.
 
@@ -71,5 +77,6 @@ sudo docker exec -it asterisk asterisk -rvvv
 sudo docker exec asterisk asterisk -rx "pjsip show endpoints"
 sudo docker exec asterisk asterisk -rx "pjsip show contacts"
 sudo docker exec asterisk asterisk -rx "core show channels"
+sudo docker exec asterisk asterisk -rx "ari show status"
 sudo docker logs -f asterisk
 ```

@@ -9,6 +9,11 @@ It assumes you already have a cloud-init template VM in Proxmox. That template s
 - Cloud-init installed
 - SSH enabled
 - A serial device if your template requires it
+- A boot disk on `scsi0`
+- `virtio-scsi-single` if you follow the companion `proxmox-ubuntu24` template project
+- `iothread=1` on `scsi0` if you follow the companion `proxmox-ubuntu24` template project
+
+This PBX repo clones the template and explicitly enforces `scsi_hardware = "virtio-scsi-single"` plus `iothread = true` on the `scsi0` VM disk. That keeps the cloned VM aligned with the companion `proxmox-ubuntu24` template project's storage settings.
 
 ## Usage
 
@@ -41,5 +46,5 @@ Example:
 
 ```ini
 [asterisk]
-pbx1 ansible_host=192.168.1.50 ansible_user=ansible
+pbx1 ansible_host=10.10.10.50 ansible_user=ansible
 ```

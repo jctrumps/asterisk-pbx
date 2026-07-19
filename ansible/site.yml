@@ -5,6 +5,19 @@
   gather_facts: true
 
   pre_tasks:
+    - name: Check for Asterisk local overrides
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/group_vars/asterisk_local.yml"
+      register: asterisk_local_file
+      delegate_to: localhost
+      become: false
+      run_once: true
+
+    - name: Load Asterisk local overrides
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/group_vars/asterisk_local.yml"
+      when: asterisk_local_file.stat.exists
+
     - name: Check for Asterisk vault overrides
       ansible.builtin.stat:
         path: "{{ playbook_dir }}/group_vars/asterisk_vault.yml"

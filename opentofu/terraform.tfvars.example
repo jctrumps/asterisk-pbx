@@ -10,9 +10,9 @@ template_vm_id = 9024
 
 # PBX VM
 vm_id            = 150
-vm_name          = "pbx1"
+vm_name          = "pbx-1"
 vm_cpu_cores     = 2
-vm_memory_mb     = 2048
+vm_memory_mb     = 4096
 vm_disk_size_gb  = 32
 
 # Storage and network
@@ -23,15 +23,15 @@ vm_vlan_id             = null
 
 # Static IP recommended for a PBX.
 # Use "dhcp" only if you also set ansible_host_override or update inventory after boot.
-vm_ipv4_address = "192.168.1.50/24"
-vm_ipv4_gateway = "192.168.1.1"
+vm_ipv4_address = "10.10.10.50/24"
+vm_ipv4_gateway = "10.10.10.1"
 dns_domain      = "local"
-dns_servers     = ["192.168.1.1", "1.1.1.1"]
+dns_servers     = ["10.10.10.1", "1.1.1.1"]
 
 # Cloud-init admin user for Ansible
 vm_username = "ansible"
 ssh_public_keys = [
-  "ssh-ed25519 AAAA_REPLACE_WITH_YOUR_PUBLIC_KEY yourname@workstation"
+  "ssh-ed25519 AAAA_REPLACE_WITH_YOUR_PUBLIC_KEY user@example-host"
 ]
 
 # Optional. Prefer SSH keys instead of passwords.

@@ -82,15 +82,17 @@ Important DHCP caveat:
 Copy:
 
 ```bash
+cp ansible/group_vars/asterisk_local.yml.example ansible/group_vars/asterisk_local.yml
 cp ansible/group_vars/asterisk_vault.yml.example ansible/group_vars/asterisk_vault.yml
 ```
 
 Then review:
 
 - `ansible/group_vars/asterisk.yml`
+- `ansible/group_vars/asterisk_local.yml`
 - `ansible/group_vars/asterisk_vault.yml`
 
-Do not leave placeholder passwords in place. The playbook is designed to fail when passwords still start with `CHANGE_ME` or similar placeholders.
+Use `asterisk_local.yml` for local non-secret settings such as `asterisk_local_net`, NAT addresses, ARI allowed origins, and fallback queue members. Use `asterisk_vault.yml` for SIP passwords, ARI password, and voicemail PINs. Do not leave placeholder passwords in place. The playbook is designed to fail when passwords still start with `CHANGE_ME` or similar placeholders.
 
 ## Step 6: run Ansible
 

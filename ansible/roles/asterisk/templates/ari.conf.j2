@@ -1,0 +1,12 @@
+; Managed by Ansible. Do not edit directly on the VM.
+
+[general]
+enabled={{ 'yes' if asterisk_ari_enabled | bool else 'no' }}
+pretty=yes
+allowed_origins={{ asterisk_ari_allowed_origins }}
+
+[{{ asterisk_ari_username }}]
+type=user
+read_only=no
+password={{ asterisk_ari_password }}
+password_format=plain

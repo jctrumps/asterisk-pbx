@@ -14,6 +14,7 @@ resource "proxmox_virtual_environment_vm" "pbx" {
 
   started = true
   on_boot = true
+  scsi_hardware = "virtio-scsi-single"
 
   clone {
     vm_id = var.template_vm_id
@@ -49,6 +50,7 @@ resource "proxmox_virtual_environment_vm" "pbx" {
     interface    = "scsi0"
     size         = var.vm_disk_size_gb
     discard      = "on"
+    iothread     = true
   }
 
   network_device {

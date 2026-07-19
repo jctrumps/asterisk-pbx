@@ -1,0 +1,17 @@
+; Managed by Ansible. Do not edit directly on the VM.
+
+[general]
+persistentmembers=yes
+autofill=yes
+
+[{{ asterisk_human_queue_name }}]
+musicclass=default
+strategy=ringall
+timeout=15
+retry=3
+maxlen=0
+joinempty=yes
+leavewhenempty=no
+{% for member in asterisk_human_queue_members %}
+member => {{ member }}
+{% endfor %}

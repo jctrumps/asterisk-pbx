@@ -37,25 +37,6 @@ noload => cel_radius.so
 noload => cel_sqlite3_custom.so
 noload => cdr_sqlite3_custom.so
 
-; Optional APIs/features not needed yet
-noload => res_ari.so
-noload => res_ari_applications.so
-noload => res_ari_asterisk.so
-noload => res_ari_bridges.so
-noload => res_ari_channels.so
-noload => res_ari_device_states.so
-noload => res_ari_endpoints.so
-noload => res_ari_events.so
-noload => res_ari_mailboxes.so
-noload => res_ari_model.so
-noload => res_ari_playbacks.so
-noload => res_ari_recordings.so
-noload => res_ari_sounds.so
-noload => res_stasis.so
-noload => res_stasis_recording.so
-noload => res_stasis_snoop.so
-noload => res_stasis_test.so
-
 ; Optional services we are not using
 noload => res_xmpp.so
 noload => res_phoneprov.so
@@ -88,11 +69,9 @@ noload => res_hep.so
 noload => res_hep_pjsip.so
 noload => res_hep_rtcp.so
 
-; Optional speech/external media helpers
+; Optional speech helpers not needed by the PBX side of ARI External Media.
 noload => res_speech.so
 noload => res_speech_aeap.so
-noload => res_audiosocket.so
-noload => app_audiosocket.so
 noload => res_aeap.so
 
 ; Deprecated chan_sip — we use PJSIP
@@ -105,16 +84,10 @@ noload => app_macro.so
 
 ; Modules failing because their parent dependency is intentionally disabled
 noload => res_pjsip_phoneprov_provider.so
-noload => app_stasis.so
-noload => res_stasis_answer.so
-noload => res_stasis_playback.so
-noload => res_stasis_device_state.so
 noload => func_odbc.so
 noload => app_voicemail_odbc.so
 noload => app_speech_utils.so
 noload => res_agi.so
 noload => res_pjsip_stir_shaken.so
 noload => res_fax_spandsp.so
-noload => chan_audiosocket.so
-noload => res_pjsip_transport_websocket.so
 noload => pbx_dundi.so

@@ -1,17 +1,45 @@
 FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
+ARG ASTERISK_VERSION={{ asterisk_version }}
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates \
+       curl \
+       file \
+       flex \
+       bison \
+       build-essential \
+       pkg-config \
        procps \
        tini \
-       asterisk \
-       asterisk-modules \
-       asterisk-core-sounds-en-gsm \
-       asterisk-moh-opsound-gsm \
-    && rm -rf /var/lib/apt/lists/*
+       wget \
+       libcurl4-openssl-dev \
+       libedit-dev \
+       libncurses-dev \
+       libopus-dev \
+       libsqlite3-dev \
+       libsrtp2-dev \
+       libspeexdsp-dev \
+       libssl-dev \
+       liburiparser-dev \
+       libxml2-dev \
+       uuid-dev \
+    && groupadd --system asterisk \
+    && useradd --system --gid asterisk --home-dir /var/lib/asterisk --no-create-home --shell /usr/sbin/nologin asterisk \
+    && mkdir -p /usr/src/asterisk \
+    && wget -O /tmp/asterisk.tar.gz "https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-${ASTERISK_VERSION}.tar.gz" \
+    && tar --strip-components=1 -xzf /tmp/asterisk.tar.gz -C /usr/src/asterisk \
+    && cd /usr/src/asterisk \
+    && ./configure --with-jansson-bundled --with-pjproject-bundled \
+    && make menuselect.makeopts \
+    && menuselect/menuselect --enable chan_websocket --enable res_http_websocket --enable res_ari --enable app_stasis --enable CORE-SOUNDS-EN-GSM --enable MOH-OPSOUND-GSM menuselect.makeopts \
+    && make -j"$(nproc)" \
+    && make install \
+    && mkdir -p /var/lib/asterisk /var/log/asterisk /var/run/asterisk /var/spool/asterisk \
+    && chown -R asterisk:asterisk /var/lib/asterisk /var/log/asterisk /var/run/asterisk /var/spool/asterisk \
+    && rm -rf /usr/src/asterisk /tmp/asterisk.tar.gz /var/lib/apt/lists/*
 
 RUN mkdir -p /root \
     && touch /root/.asterisk_history \

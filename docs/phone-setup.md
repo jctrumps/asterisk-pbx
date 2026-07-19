@@ -11,7 +11,7 @@ Account name:      1001
 SIP username:      1001
 Auth username:     1001
 Password:          from group_vars/asterisk_vault.yml
-Domain/server:     192.168.1.50
+Domain/server:     10.10.10.50
 Proxy:             leave blank for LAN use
 Transport:         UDP
 Port:              5060
@@ -23,6 +23,8 @@ STUN:              off for LAN use
 ```text
 600 = echo test
 700 = hello-world playback
+800 = AI voice-agent Stasis entry point
+0 = human fallback queue
 1001 calls extension 1001
 1002 calls extension 1002
 ```

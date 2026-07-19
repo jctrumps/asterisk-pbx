@@ -11,6 +11,7 @@ asterisk_container_name: asterisk
 asterisk_image_name: local/asterisk-pbx
 asterisk_image_tag: latest
 asterisk_restart_policy: unless-stopped
+asterisk_version: "22-current"
 
 # Network settings
 # Docker uses host networking inside the VM.
@@ -18,9 +19,11 @@ asterisk_sip_bind: "0.0.0.0"
 asterisk_sip_udp_port: 5060
 asterisk_rtp_start: 10000
 asterisk_rtp_end: 10100
+asterisk_http_bind: "0.0.0.0"
+asterisk_http_port: 8088
 
 # Adjust this to your LAN/VLAN.
-asterisk_local_net: "192.168.1.0/24"
+asterisk_local_net: "10.10.10.0/24"
 
 # Leave these empty for LAN-only use.
 # Set these if you expose this PBX behind NAT or use an external SIP trunk.
@@ -39,6 +42,31 @@ asterisk_extensions:
 
 # Keep true after initial testing.
 asterisk_enforce_password_change: true
+
+# ARI and AI voice-agent PBX integration.
+# Override asterisk_ari_password in group_vars/asterisk_vault.yml.
+asterisk_ari_enabled: true
+asterisk_ari_username: "voice_ai"
+asterisk_ari_password: "CHANGE_ME_ARI_LONG_RANDOM_PASSWORD"
+asterisk_ari_allowed_origins: "http://10.10.10.60:8000"
+asterisk_ai_extension: "800"
+asterisk_ai_stasis_app: "voice-ai-agent"
+asterisk_operator_extension: "0"
+asterisk_human_queue_name: "human-fallback"
+asterisk_human_queue_timeout: 20
+asterisk_human_queue_members:
+  - "PJSIP/1001"
+
+# Voicemail fallback for the human queue.
+# Override mailbox passwords in group_vars/asterisk_vault.yml.
+asterisk_voicemail_enabled: true
+asterisk_voicemail_context: "default"
+asterisk_ai_fallback_mailbox: "1001"
+asterisk_voicemail_mailboxes:
+  - mailbox: "1001"
+    name: "Phone 1001"
+    email: "user@example.invalid"
+    password: "CHANGE_ME_1001_VOICEMAIL_PIN"
 
 # OS packages installed before Docker/Asterisk deploy.
 common_packages:

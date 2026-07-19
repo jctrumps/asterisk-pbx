@@ -27,7 +27,7 @@ A dedicated VM keeps Docker networking, PBX ports, logs, and security controls a
 
 ```text
 Phone/Softphone             PBX VM                    Asterisk container
-192.168.1.x   --->   192.168.1.50:5060/UDP   --->   network_mode: host
+10.10.10.x    --->   10.10.10.50:5060/UDP   --->   network_mode: host
               <---   UDP/10000-10100 RTP     <---
 ```
 

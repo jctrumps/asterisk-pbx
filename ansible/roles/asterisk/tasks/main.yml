@@ -11,6 +11,29 @@
   when: asterisk_enforce_password_change | bool
   no_log: true
 
+- name: Validate ARI password was changed
+  ansible.builtin.assert:
+    that:
+      - asterisk_ari_password is defined
+      - asterisk_ari_password | length >= 16
+      - not (asterisk_ari_password is match('^CHANGE_ME'))
+      - not (asterisk_ari_password is search('replace-with'))
+    fail_msg: "Change asterisk_ari_password in group_vars/asterisk_vault.yml."
+  when: asterisk_ari_enabled | bool
+  no_log: true
+
+- name: Validate voicemail mailbox passwords were changed
+  ansible.builtin.assert:
+    that:
+      - item.password is defined
+      - item.password | length >= 4
+      - not (item.password is match('^CHANGE_ME'))
+      - not (item.password is search('replace-with'))
+    fail_msg: "Change the voicemail password for mailbox {{ item.mailbox }} in group_vars/asterisk_vault.yml."
+  loop: "{{ asterisk_voicemail_mailboxes }}"
+  when: asterisk_voicemail_enabled | bool
+  no_log: true
+
 - name: Create Asterisk project directories
   ansible.builtin.file:
     path: "{{ item }}"
@@ -51,6 +74,10 @@
     - rtp.conf
     - logger.conf
     - modules.conf
+    - http.conf
+    - ari.conf
+    - queues.conf
+    - voicemail.conf
   notify: Reload Asterisk
 
 - name: Ensure Asterisk bind-mount directories are readable
